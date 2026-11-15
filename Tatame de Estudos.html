@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tatame de Estudos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: uma coluna calma (máx. 720px), alinhada à esquerda, com muito respiro. Branco e dourado, como as legendas do Byel.
+     O dourado marca só o que importa: o título, a ação principal e o progresso. */
+  --bg:#FDFCF9;
+  --surface:#F6F3EB;
+  --ink:#24221D;
+  --muted:#7A7467;
+  --line:#E7E2D5;
+  --gold:#C29A3E;
+  --gold-text:#8E6A1B;
+  --gold-soft:#F2E8CE;
+  --on-gold:#221E15;
+  --bad:#A3443A;
+  --good:#4E7A49;
+  --b0:#EFEBE0; --b1:#6A86B8; --b2:#8E77B3; --b3:#2B2925;
+  --font:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15140F; --surface:#1E1C17; --ink:#F4F1E8; --muted:#A9A294; --line:#2E2B24;
+    --gold:#D9B45F; --gold-text:#E2BF6C; --gold-soft:#2C2616; --on-gold:#1A1712;
+    --bad:#E3897D; --good:#93C38B; --b0:#F1EDE2; --b3:#08080A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15140F; --surface:#1E1C17; --ink:#F4F1E8; --muted:#A9A294; --line:#2E2B24;
+  --gold:#D9B45F; --gold-text:#E2BF6C; --gold-soft:#2C2616; --on-gold:#1A1712;
+  --bad:#E3897D; --good:#93C38B; --b0:#F1EDE2; --b3:#08080A;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(32px,8vw,44px);font-weight:800;line-height:1.1;color:var(--gold-text)}
+h2{font-size:20px;font-weight:700;line-height:1.3}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+/* Topo */
+.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;text-decoration:none;letter-spacing:-.01em}
+.logo i{width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.track-pick{margin-left:auto;display:flex;min-width:0;flex:0 1 auto}
+.track-pick select{max-width:100%;min-width:0;background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 34px 8px 14px;font-weight:600;font-size:14px;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.top-btn{background:transparent;border:0;color:var(--muted);font-weight:600;font-size:14px;padding:8px 6px;cursor:pointer}
+.top-btn:hover{color:var(--ink)}
+@media (max-width:599px){.hide-sm{display:none}.track-pick{flex:1;justify-content:flex-end}}
+
+/* Navegação */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--bg);border-top:1px solid var(--line)}
+.tabs ul{list-style:none;margin:0 auto;padding:0 8px;max-width:720px;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabs a{display:block;text-align:center;text-decoration:none;font-size:13px;font-weight:600;color:var(--muted);padding:14px 2px 16px;position:relative}
+.tabs a[aria-current="page"]{color:var(--gold-text)}
+.tabs a[aria-current="page"]::before{content:"";position:absolute;left:50%;top:6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--gold)}
+@media (min-width:760px){
+  .tabs{position:static;border:0;background:transparent}
+  .tabs ul{display:flex;gap:6px;padding:14px 20px 0}
+  .tabs a{padding:8px 14px;font-size:14.5px;border-radius:999px}
+  .tabs a[aria-current="page"]{background:var(--gold-soft)}
+  .tabs a[aria-current="page"]::before{display:none}
+}
+main{padding:36px 0 130px}
+@media (min-width:760px){main{padding:56px 0 80px}}
+.view{display:flex;flex-direction:column;gap:52px}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:transparent;border-radius:999px;padding:11px 20px;font-weight:600;font-size:15px;cursor:pointer;line-height:1.2;text-decoration:none;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--muted)}
+.btn-gold{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.btn-gold:hover{border-color:var(--gold);filter:brightness(1.04)}
+.btn-sm{padding:7px 14px;font-size:14px}
+.btn-text{background:transparent;border:0;padding:6px 2px;color:var(--muted);border-radius:6px;font-weight:600;font-size:14.5px;cursor:pointer}
+.btn-text:hover{color:var(--ink)}
+.btn-text.danger{color:var(--bad)}
+.btn[data-armed]{background:var(--bad);color:#fff;border-color:var(--bad);padding:7px 14px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* Faixa: um ponto colorido + nome, e 4 passos de nível em dourado */
+.beltchip{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;white-space:nowrap}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--b0);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);flex:none}
+.dot[data-b="1"]{background:var(--b1)} .dot[data-b="2"]{background:var(--b2)} .dot[data-b="3"]{background:var(--b3);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%}
+.levels i{display:block;height:4px;border-radius:2px;background:var(--line)}
+.levels i.on{background:var(--gold)}
+.levels-labeled{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.levels-labeled div{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted)}
+.levels-labeled div i{display:block;height:5px;border-radius:3px;background:var(--line)}
+.levels-labeled div.on i{background:var(--gold)}
+.levels-labeled div.now{color:var(--ink);font-weight:700}
+
+/* Hoje */
+.example{font-size:14.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.example .btn-text{color:var(--gold-text);font-weight:700}
+.hero{display:flex;flex-direction:column;gap:14px}
+.hero .goal{font-size:18px;max-width:52ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:14.5px}
+.belt-sum{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.belt-sum li{display:flex;flex-direction:column;gap:6px}
+.belt-sum .beltchip{color:var(--muted);font-weight:500}
+.belt-sum strong{font-size:28px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+@media (max-width:420px){.belt-sum{grid-template-columns:repeat(2,1fr);row-gap:20px}}
+
+.panel{background:var(--surface);border-radius:20px;padding:26px}
+.train{display:flex;flex-direction:column;gap:18px}
+.train h2{color:var(--gold-text)}
+.train p{color:var(--muted);max-width:54ch}
+.train .after{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding-top:18px;border-top:1px solid var(--line)}
+.train .after span{color:var(--muted);font-size:14.5px}
+
+.block{display:flex;flex-direction:column;gap:18px}
+.block-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.block-head .note{font-size:14px;color:var(--muted)}
+.empty{color:var(--muted);padding:4px 0;max-width:56ch}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.item{width:100%;text-align:left;background:var(--surface);border:0;border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;cursor:pointer}
+button.item:hover{background:var(--gold-soft)}
+.item-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.t-name{font-weight:700;font-size:16.5px}
+.when{font-size:14px;color:var(--muted)}
+.when.late,.when.now{color:var(--gold-text);font-weight:700}
+.item .sub{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted)}
+
+/* Linha */
+.day{display:flex;flex-direction:column;gap:12px}
+.day h3{font-size:14px;color:var(--muted);font-weight:600}
+.s-item{background:var(--surface);border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+.s-meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:var(--muted)}
+.s-note{font-size:14.5px;color:var(--muted)}
+.change{font-weight:700;color:var(--gold-text)}
+.change.down{color:var(--bad)}
+
+/* Páginas */
+.page-head{display:flex;flex-direction:column;gap:14px}
+.lede{font-size:17px;max-width:56ch;color:var(--muted)}
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.legend li{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:baseline}
+.legend p{color:var(--muted);font-size:15px}
+@media (max-width:420px){.legend li{grid-template-columns:1fr;gap:4px}}
+
+/* Caderno */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--gold-soft);border-color:var(--gold-soft);color:var(--gold-text)}
+.filters{display:flex;flex-wrap:wrap;gap:12px}
+.filters select,.filters input{flex:1 1 200px;min-width:0;background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
+.note-card{background:var(--surface);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.note-head{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;font-size:13.5px;color:var(--muted)}
+.kind{font-weight:700;color:var(--gold-text)}
+.kind.erro{color:var(--bad)}
+.note-title{font-weight:700;font-size:16.5px}
+.note-text{white-space:pre-wrap;max-width:62ch}
+.note-card dl{margin:0;display:grid;grid-template-columns:80px 1fr;gap:6px 14px;font-size:15px}
+.note-card dt{color:var(--muted);font-weight:600;font-size:14px}
+.note-card dd{margin:0}
+.note-card.done{opacity:.6}
+.flag{font-size:13px;font-weight:700;color:var(--gold-text)}
+
+/* Prompt */
+.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:12px;max-width:58ch}
+.steps li::marker{font-weight:700;color:var(--gold-text)}
+pre{margin:0;white-space:pre-wrap;word-wrap:break-word;background:var(--surface);border-radius:16px;padding:22px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.65;max-height:62vh;overflow:auto}
+
+/* Janelas e formulários */
+dialog{border:0;border-radius:22px;background:var(--bg);color:var(--ink);padding:0;width:min(560px,calc(100% - 24px));max-height:90vh;overflow:auto;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+dialog::backdrop{background:rgba(20,18,12,.45)}
+.form{display:flex;flex-direction:column;gap:18px;padding:28px 24px}
+.form h2{font-size:22px;color:var(--gold-text)}
+.form-sub{color:var(--muted);font-size:14.5px;margin-top:-10px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label,.seg legend{font-size:14px;font-weight:600}
+.form input[type=text],.form input[type=number],.form input[type=date],.form select,.form textarea{width:100%;background:var(--surface);border:1px solid transparent;border-radius:12px;padding:12px 14px;font-size:15.5px}
+.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--gold);outline:none}
+.form textarea{resize:vertical;line-height:1.5}
+.hint{font-size:13.5px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+.seg{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.seg legend{padding:0;margin-bottom:8px}
+.seg .opts{display:flex;flex-wrap:wrap;gap:8px}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg span{display:block;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:14.5px;font-weight:600;color:var(--muted)}
+.seg input:checked + span{background:var(--gold-soft);border-color:var(--gold-soft);color:var(--gold-text)}
+.seg input:focus-visible + span{outline:2px solid var(--gold);outline-offset:2px}
+.check{display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--gold)}
+details{background:var(--surface);border-radius:12px;padding:12px 14px}
+details summary{cursor:pointer;font-weight:600;font-size:14.5px}
+details[open] summary{margin-bottom:12px}
+.err-rows{display:flex;flex-direction:column;gap:14px}
+.err-row{display:flex;flex-direction:column;gap:10px;background:var(--surface);border-radius:14px;padding:14px}
+.err-row label{display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:600}
+.err-row label.check{flex-direction:row;font-weight:500}
+.err-row input[type=text],.err-row textarea{background:var(--bg)!important}
+.form-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end;align-items:center;padding-top:6px}
+.form-actions .spacer{flex:1}
+.form-error{color:var(--bad);font-size:14px;font-weight:600}
+.facts{margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.facts div{display:flex;flex-direction:column;gap:2px}
+.facts dt{font-size:13px;color:var(--muted)}
+.facts dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.mini{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.mini li{font-size:14.5px;padding-left:12px;border-left:2px solid var(--gold-soft)}
+.mini .k{color:var(--gold-text);font-weight:700;margin-right:6px}
+.sec{display:flex;flex-direction:column;gap:14px;padding-top:22px;border-top:1px solid var(--line)}
+.store-note{font-size:14.5px;color:var(--muted)}
+
+/* Aviso */
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--bg);padding:13px 20px;border-radius:999px;font-weight:600;font-size:14.5px;max-width:min(520px,calc(100% - 32px));text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.up{background:var(--gold);color:var(--on-gold)}
+@media (min-width:760px){.toast{bottom:32px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#hoje" aria-label="Tatame, ir para Hoje"><i aria-hidden="true"></i>Tatame</a>
+    <label class="track-pick"><span class="sr">Trilha de estudo</span><select id="trackSelect"></select></label>
+    <button class="top-btn hide-sm" type="button" data-action="new-track">Nova trilha</button>
+    <button class="top-btn" type="button" data-action="settings">Ajustes</button>
+  </div>
+</header>
+<nav class="tabs" aria-label="Seções">
+  <ul>
+    <li><a href="#hoje" data-view="hoje">Hoje</a></li>
+    <li><a href="#faixas" data-view="faixas">Faixas</a></li>
+    <li><a href="#caderno" data-view="caderno">Caderno</a></li>
+    <li><a href="#linha" data-view="linha">Linha</a></li>
+    <li><a href="#prompt" data-view="prompt">Prompt</a></li>
+  </ul>
+</nav>
+<main class="wrap"><div id="view" class="view"></div></main>
+<dialog id="dlg" aria-label="Janela"></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- O prompt (versão 2.1) ---------- */
+const PROMPT = `# QUEM VOCÊ É
+Você é um professor particular de elite. Domina profundamente o assunto que eu escolher e domina a ciência da aprendizagem. Sua missão é me levar do nível em que estou até o domínio real, no menor tempo possível, dentro do tempo e da energia que eu realmente tenho.
+
+Você age como um treinador exigente: cobra, corrige na hora e não aceita atalho. Nunca humilha. Elogio só quando é merecido e específico.
+
+# O MÉTODO QUE VOCÊ SEGUE
+Aplique estes princípios sem me dar aula sobre eles:
+1. Aprendizagem para o domínio (Benjamin Bloom): eu só avanço quando dominar a etapa atual.
+2. Taxonomia de Bloom: suas perguntas sobem de nível: lembrar → entender → aplicar → analisar → avaliar → criar.
+3. Zona de desenvolvimento proximal: o desafio deve ser difícil, mas possível. Se eu acertar tudo com facilidade, aumente a dificuldade. Se eu errar quase tudo, volte um passo.
+4. Andaime: no começo de um assunto, mostre um exemplo resolvido passo a passo; depois, me dê um exemplo pela metade para eu completar; depois, problemas sozinho. Retire a ajuda aos poucos.
+5. Prática de recuperação: eu sempre tento lembrar antes de ver qualquer resposta.
+6. Prática espaçada: o que eu aprendo volta em revisões com intervalos cada vez maiores.
+7. Prática intercalada: misture tópicos antigos com os novos.
+8. Autoexplicação: eu explico com minhas palavras e você aponta as lacunas.
+9. Feedback imediato e específico: o que errei, por que errei e como pensar certo.
+10. Calibração: nas perguntas de checagem, eu digo antes de responder quanto tenho de certeza (0 a 100%). Use isso para mostrar onde eu acho que sei, mas não sei.
+
+# AS FAIXAS
+Cada tópico do plano tem 4 faixas, e eu subo uma de cada vez:
+- Branca (Lembrar): reconheço e defino os conceitos básicos.
+- Azul (Entender): explico com minhas palavras e dou exemplos próprios.
+- Roxa (Aplicar): resolvo sozinho exercícios que nunca vi.
+- Preta (Dominar): resolvo questões de nível de prova, encontro erros, comparo caminhos e consigo ensinar.
+Promoção: só subo de faixa se acertar pelo menos 80% de uma checagem sem consulta, feita em um dia diferente do dia em que aprendi.
+Rebaixamento: se eu ficar abaixo de 60% numa revisão, desço uma faixa naquele tópico e reforçamos.
+
+# COMO ENSINAR POR FAIXAS
+Você ensina cada tópico faixa por faixa. Em toda sessão:
+1. Comece dizendo o tópico, a minha faixa atual nele e o objetivo de hoje.
+2. Ensine e pratique no nível da faixa atual. Nunca pule faixa.
+3. A checagem do fim é no nível da próxima faixa: é ela que decide se eu subo. Diga a minha % de acertos.
+O que muda em cada faixa:
+- Branca: definições, vocabulário e exemplos resolvidos. Perguntas de lembrar e reconhecer.
+- Azul: eu explico com minhas palavras, comparo conceitos, crio exemplos e acho erros em exemplos simples.
+- Roxa: exercícios novos, problemas com contexto e questões no estilo da prova, misturando tópicos.
+- Preta: questões difíceis de prova, pegadinhas, encontrar e corrigir erros, comparar soluções e ensinar o tema para você.
+
+# MEU CADERNO
+Se eu colar meu caderno (aprendizados, anotações, dúvidas e erros), use como contexto do que eu já estudei: retome as dúvidas em aberto, ataque os erros que se repetem e não repita o que eu já domino.
+
+# COMO COMEÇAMOS
+1. Me entreviste, uma pergunta por vez:
+   - O que eu quero aprender?
+   - Para quê (prova, concurso, emprego, projeto) e qual é o prazo?
+   - Quanto tempo real eu tenho por dia, em que horário e em que condições (trabalho, cansaço, barulho)?
+   - Que materiais eu tenho ou consigo de graça?
+2. Faça um teste diagnóstico curto (5 a 8 perguntas, da mais fácil para a mais difícil) para descobrir meu nível real, não o que eu acho que sei.
+3. Entregue:
+   - O MAPA: os tópicos em ordem, começando pelo que mais cai ou mais importa para o meu objetivo, com a minha faixa atual em cada um.
+   - O PLANO: o que fazer em cada semana até o prazo, cabendo no meu tempo real.
+
+# CADA SESSÃO
+1. Revisão de abertura: perguntas sobre as revisões agendadas e a sessão anterior. Sem consulta.
+2. Conteúdo novo: o mínimo de teoria, no nível da faixa atual, + um exemplo resolvido.
+3. Prática: exemplo para completar → problemas sozinho, misturados com tópicos antigos.
+4. Minha vez de explicar: eu explico o conceito com minhas palavras; você aponta o que ficou vago ou errado.
+5. Checagem: 3 a 5 perguntas do nível da próxima faixa, com calibração. No fim, diga a % de acertos.
+6. Ficha: mostre a FICHA DO ALUNO atualizada.
+
+# FICHA DO ALUNO (no fim de toda sessão)
+- Objetivo e prazo:
+- Sessão nº e data:
+- Mapa (tópico | faixa | % na última checagem):
+- Linha de aprendizado (sessão | o que estudei | faixa antes → depois):
+- Erros que se repetem (padrão | correção):
+- Onde eu tinha certeza e errei:
+- Dúvidas em aberto:
+- Revisões agendadas (tópico | quando):
+- Próxima sessão começa por:
+Eu vou salvar a ficha e colar no início da próxima conversa. Quando eu colar, continue exatamente de onde paramos.
+
+# REGRAS
+- Nunca me dê a resposta antes de eu tentar. Se eu travar: dica leve → dica forte → resposta explicada.
+- "Entendi" não vale. Me prove com uma pergunta.
+- Uma pergunta por vez. Espere minha resposta.
+- Se eu errar por falta de base, volte ao pré-requisito antes de seguir.
+- Se eu sumir por dias: pergunte o que aconteceu, ajuste o plano ao prazo que sobrou e comece pela revisão. Sem sermão e sem passar pano.
+- Se eu disser que estou exausto: sessão mínima de 15 minutos, só revisão. Pouco é melhor que zero.
+- Se não tiver certeza de uma informação, diga e me indique uma fonte confiável para conferir. Para provas, priorize o edital e provas anteriores.
+- Se não souber a data de hoje, pergunte.
+- Linguagem simples, frases curtas, um passo por vez.
+
+Comece agora: apresente-se em uma frase e faça a primeira pergunta.`;
+
+const BELTS = [
+  {name:'Branca', level:'Lembrar', desc:'Reconhece e define os conceitos básicos.'},
+  {name:'Azul', level:'Entender', desc:'Explica com as próprias palavras e dá exemplos.'},
+  {name:'Roxa', level:'Aplicar', desc:'Resolve sozinho exercícios que nunca viu.'},
+  {name:'Preta', level:'Dominar', desc:'Resolve questões de prova, acha erros e consegue ensinar.'}
+];
+const KINDS = {
+  aprendizado:{one:'Aprendizado', many:'Aprendizados', label:'O que você aprendeu?'},
+  anotacao:{one:'Anotação', many:'Anotações', label:'Anotação'},
+  duvida:{one:'Dúvida', many:'Dúvidas', label:'Qual é a dúvida?'},
+  erro:{one:'Erro', many:'Erros', label:'O que você errou?'}
+};
+const KIND_ORDER = ['aprendizado','anotacao','duvida','erro'];
+const INTERVALS = [1, 7, 30, 60];
+const LS_KEY = 'tatame-estudos-v1';
+const VIEWS = ['hoje','faixas','caderno','linha','prompt'];
+const CONTEXT_LIMIT = 14000;
+
+/* ---------- Utilidades ---------- */
+const $ = (s, el) => (el || document).querySelector(s);
+const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function uid(){ return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-5); }
+function toISO(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function parseISO(s){ const p = String(s).split('-').map(Number); return new Date(p[0], (p[1]||1)-1, p[2]||1); }
+function today(){ return toISO(new Date()); }
+function addDays(s, n){ const d = parseISO(s); d.setDate(d.getDate() + n); return toISO(d); }
+function diffDays(a, b){ return Math.round((parseISO(b) - parseISO(a)) / 86400000); }
+function fmtShort(s){ return parseISO(s).toLocaleDateString('pt-BR', {day:'numeric', month:'short'}).replace('.', ''); }
+function fmtFull(s){ return parseISO(s).toLocaleDateString('pt-BR'); }
+function fmtLong(s){ const t = parseISO(s).toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long'}); return t.charAt(0).toUpperCase() + t.slice(1); }
+function plural(n, one, many){ return n + ' ' + (n === 1 ? one : many); }
+function oneLine(s){ return String(s || '').replace(/\s*\n+\s*/g, ' / ').trim(); }
+
+/* ---------- Regras das faixas e das revisões ---------- */
+function applySession(tp, s){
+  const before = tp.belt;
+  let after = before;
+  if (s.check != null){
+    if (s.check >= 80 && s.date > tp.beltSince && before < 3) after = before + 1;
+    else if (s.check < 60 && before > 0) after = before - 1;
+    tp.lastCheck = s.check;
+  }
+  if (after !== before){ tp.belt = after; tp.beltSince = s.date; tp.stripes = 0; }
+  else { tp.stripes = Math.min(99, (tp.stripes || 0) + 1); }
+  if (s.kind === 'novo'){ tp.reviewStage = 0; }
+  else if (s.check != null){
+    if (s.check >= 80) tp.reviewStage = Math.min((tp.reviewStage || 0) + 1, INTERVALS.length - 1);
+    else if (s.check < 60) tp.reviewStage = 0;
+  }
+  tp.nextReview = addDays(s.date, INTERVALS[tp.reviewStage || 0]);
+  return {before: before, after: after};
+}
+function reviewInfo(tp){
+  if (!tp.nextReview) return {text:'Sem revisão marcada', cls:''};
+  const d = diffDays(today(), tp.nextReview);
+  if (d === 0) return {text:'Revisar hoje', cls:'now'};
+  if (d < 0) return {text:'Atrasada há ' + plural(-d, 'dia', 'dias'), cls:'late'};
+  if (d === 1) return {text:'Revisão amanhã', cls:''};
+  return {text:'Revisão em ' + plural(d, 'dia', 'dias'), cls:''};
+}
+
+/* ---------- Estado ---------- */
+function blankState(){ return {v:2, pristine:false, activeTrackId:null, tracks:[], topics:[], sessions:[], notes:[]}; }
+function newTopic(trackId, name, belt, date){ return {id:uid(), trackId:trackId, name:name, belt:belt || 0, beltSince:date || today(), stripes:0, lastCheck:null, reviewStage:0, nextReview:null, createdAt:date || today()}; }
+function newNote(trackId, topicId, type, f){
+  return Object.assign({id:uid(), trackId:trackId, topicId:topicId || null, type:type, title:'', text:'', why:'', right:'', sure:false, resolved:false, date:today(), updatedAt:today()}, f || {});
+}
+function seedState(){
+  const s = blankState(); s.pristine = true;
+  const t = today();
+  const track = {id:uid(), name:'Python do zero', goal:'Conseguir meu primeiro estágio em dados', deadline:addDays(t, 60), minutes:40, ficha:'', example:true, createdAt:addDays(t, -8)};
+  s.tracks.push(track); s.activeTrackId = track.id;
+  const mk = (name, off) => { const tp = newTopic(track.id, name, 0, addDays(t, off)); s.topics.push(tp); return tp; };
+  const log = (tp, off, kind, check, note) => {
+    const date = addDays(t, off); const r = applySession(tp, {date:date, kind:kind, check:check});
+    s.sessions.push({id:uid(), trackId:track.id, topicId:tp.id, date:date, kind:kind, check:check, beltBefore:r.before, beltAfter:r.after, note:note || ''});
+  };
+  const v = mk('Variáveis e tipos', -8), c = mk('Condicionais (if/else)', -3), l = mk('Laços (for e while)', -1);
+  mk('Funções', 0);
+  log(v, -8, 'novo', 70, 'Primeira sessão. Entendi a ideia, errei conversão de tipos.');
+  log(v, -7, 'revisao', 85, 'Lembrei quase tudo sem olhar.');
+  log(c, -3, 'novo', 60, '');
+  log(c, -2, 'revisao', 75, 'Ainda confundo = com ==.');
+  log(l, -1, 'novo', 65, 'Sessão curta, cheguei cansado do trabalho.');
+  const n = (tp, off, type, f) => s.notes.push(newNote(track.id, tp ? tp.id : null, type, Object.assign({date:addDays(t, off), updatedAt:addDays(t, off)}, f)));
+  n(null, -8, 'anotacao', {title:'Onde eu estudo', text:'Documentação oficial do Python e as aulas gratuitas que salvei.\nResolvo os exercícios no caderno antes de digitar.'});
+  n(v, -7, 'aprendizado', {title:'Tipos básicos', text:'int é número inteiro, float tem casa decimal, str é texto e bool é verdadeiro ou falso. type() mostra o tipo de um valor.'});
+  n(v, -8, 'erro', {text:'Achei que "5" + 3 dava 8', why:'Texto e número são tipos diferentes', right:'int("5") + 3 dá 8', sure:true, resolved:true});
+  n(c, -2, 'aprendizado', {title:'if, elif e else', text:'O Python testa as condições de cima para baixo e para na primeira que for verdadeira.'});
+  n(c, -2, 'erro', {text:'Usei = no lugar de == dentro do if', why:'Confundi guardar um valor com comparar dois valores', right:'= guarda um valor; == compara dois valores', sure:true});
+  n(l, -1, 'duvida', {text:'Quando usar for e quando usar while?'});
+  n(l, -1, 'erro', {text:'Meu while nunca parava', why:'Esqueci de mudar o contador dentro do laço', right:'Atualizar o contador a cada volta: i += 1'});
+  return s;
+}
+function normalize(d){
+  if (!d || typeof d !== 'object' || !Array.isArray(d.tracks)) return null;
+  const s = blankState();
+  const arr = x => Array.isArray(x) ? x.filter(i => i && typeof i === 'object' && i.id) : [];
+  s.tracks = arr(d.tracks).map(x => Object.assign({name:'Sem nome', goal:'', deadline:'', minutes:'', ficha:'', example:false}, x));
+  s.topics = arr(d.topics).map(x => Object.assign({belt:0, stripes:0, lastCheck:null, reviewStage:0, nextReview:null, beltSince:today()}, x));
+  s.sessions = arr(d.sessions);
+  s.notes = arr(d.notes).map(x => newNote(x.trackId, x.topicId, KINDS[x.type] ? x.type : 'anotacao', x));
+  /* Dados da versão anterior: erros soltos e anotações dentro do tópico viram itens do caderno */
+  arr(d.errors).forEach(e => s.notes.push(newNote(e.trackId, e.topicId, 'erro', {id:e.id, text:e.what || '', why:e.why || '', right:e.right || '', sure:!!e.sure, resolved:!!e.resolved, date:e.date || today(), updatedAt:e.date || today()})));
+  s.topics.forEach(tp => {
+    if (tp.notes && String(tp.notes).trim()) s.notes.push(newNote(tp.trackId, tp.id, 'anotacao', {title:'Anotações', text:String(tp.notes)}));
+    delete tp.notes;
+  });
+  s.activeTrackId = s.tracks.some(x => x.id === d.activeTrackId) ? d.activeTrackId : (s.tracks[0] ? s.tracks[0].id : null);
+  s.pristine = !!d.pristine;
+  return s;
+}
+
+let state = null;
+let view = 'hoje';
+const noteFilter = {type:'all', topic:'all', q:''};
+
+function activeTrack(){ return state.tracks.find(t => t.id === state.activeTrackId) || null; }
+function topicsOf(id){ return state.topics.filter(t => t.trackId === id); }
+function topicById(id){ return state.topics.find(t => t.id === id) || null; }
+function sessionsOf(id){ return state.sessions.filter(s => s.trackId === id).map((s, i) => [s, i]).sort((a, b) => a[0].date === b[0].date ? a[1] - b[1] : (a[0].date < b[0].date ? -1 : 1)).map(x => x[0]); }
+function notesOf(id){ return state.notes.filter(n => n.trackId === id); }
+function topicName(id){ const t = topicById(id); return t ? t.name : 'Geral'; }
+
+/* ---------- Onde os dados ficam ---------- */
+const store = {mode:'memory', ref:null, writing:false, pending:false, timer:null};
+function loadLocal(){
+  try { const raw = localStorage.getItem(LS_KEY); store.mode = 'local'; return raw ? JSON.parse(raw) : null; }
+  catch(e){ store.mode = 'memory'; return null; }
+}
+function saveLocal(){ try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){} }
+function persist(){
+  state.pristine = false;
+  saveLocal();
+  if (store.ref){ clearTimeout(store.timer); store.timer = setTimeout(flushDb, 700); }
+}
+async function flushDb(){
+  if (!store.ref) return;
+  if (store.writing){ store.pending = true; return; }
+  store.writing = true;
+  try { await store.ref.set({json: JSON.stringify(state), updatedAt: new Date().toISOString()}); }
+  catch(e){
+    const code = e && e.code;
+    if (code === 'unavailable'){ store.pending = true; }
+    else if (code === 'quota_exceeded'){ toast('Seu espaço encheu. Apague itens antigos ou copie o backup.'); }
+    else { store.ref = null; store.mode = 'local'; toast('Não deu para salvar na sua conta. Seus dados ficam neste navegador.'); }
+  } finally {
+    store.writing = false;
+    if (store.pending && store.ref){ store.pending = false; setTimeout(flushDb, 1500 + Math.random() * 1500); }
+  }
+}
+function withTimeout(p, ms){ return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), ms))]); }
+async function initDb(){
+  const c = window.claude;
+  if (!c || typeof c.use !== 'function') return;
+  try {
+    const both = await withTimeout(Promise.all([c.use('db'), c.use('user')]), 10000);
+    const db = both[0], user = both[1];
+    if (!db || !user) return;
+    const id = await user.id();
+    if (!id) return;
+    const ref = db.doc('data/users/' + id + '/estado');
+    const snap = await withTimeout(ref.get(), 10000);
+    store.ref = ref; store.mode = 'db';
+    if (snap.exists){
+      const d = snap.data();
+      let parsed = null;
+      try { parsed = d && typeof d.json === 'string' ? normalize(JSON.parse(d.json)) : null; } catch(e){ parsed = null; }
+      if (parsed){ state = parsed; saveLocal(); render(); }
+    } else if (!state.pristine){ flushDb(); }
+  } catch(e){
+    store.ref = null;
+    if (store.mode === 'db') store.mode = 'local';
+  }
+}
+function storeNote(){
+  if (store.mode === 'db') return 'Seus dados ficam salvos na sua conta, num espaço que só você vê. Mesmo assim, copiar o backup de vez em quando não custa nada.';
+  if (store.mode === 'local') return 'Seus dados ficam salvos neste navegador. Se você limpar o navegador ou trocar de aparelho, eles não vão junto. Copie o backup de vez em quando.';
+  return 'Este navegador não deixou salvar. Copie o backup antes de fechar a página, ou seus registros de hoje se perdem.';
+}
+
+/* ---------- Textos para a IA ---------- */
+function buildFicha(track){
+  if (!track) return '';
+  const t = today(), topics = topicsOf(track.id), sess = sessionsOf(track.id), notes = notesOf(track.id);
+  const L = [];
+  L.push('FICHA DO ALUNO (gerada pelo Tatame em ' + fmtFull(t) + ')');
+  L.push('- Objetivo e prazo: ' + (track.goal || track.name) + (track.deadline ? ', até ' + fmtFull(track.deadline) : ''));
+  if (track.minutes) L.push('- Tempo por dia: ' + track.minutes + ' minutos');
+  L.push('- Sessões registradas: ' + sess.length + (sess.length ? ' (a última em ' + fmtFull(sess[sess.length - 1].date) + ')' : ''));
+  if (topics.length){
+    L.push('- Mapa (tópico | faixa | % na última checagem):');
+    topics.forEach(tp => L.push('  ' + tp.name + ' | ' + BELTS[tp.belt].name + ' | ' + (tp.lastCheck != null ? tp.lastCheck + '%' : 'sem checagem')));
+  }
+  const changes = sess.filter(s => s.beltBefore !== s.beltAfter).slice(-5);
+  if (changes.length){
+    L.push('- Linha de aprendizado (mudanças de faixa):');
+    changes.forEach(s => L.push('  ' + fmtFull(s.date) + ': ' + topicName(s.topicId) + ', ' + BELTS[s.beltBefore].name + ' → ' + BELTS[s.beltAfter].name));
+  }
+  const errs = notes.filter(n => n.type === 'erro' && !n.resolved);
+  if (errs.length){
+    L.push('- Erros em aberto (erro | correção):');
+    errs.slice(-8).forEach(e => L.push('  ' + oneLine(e.text) + (e.right ? ' | ' + oneLine(e.right) : '')));
+  }
+  const sure = errs.filter(e => e.sure);
+  if (sure.length){ L.push('- Onde eu tinha certeza e errei:'); sure.slice(-5).forEach(e => L.push('  ' + oneLine(e.text))); }
+  const doubts = notes.filter(n => n.type === 'duvida' && !n.resolved);
+  if (doubts.length){ L.push('- Dúvidas em aberto:'); doubts.slice(-8).forEach(n => L.push('  ' + topicName(n.topicId) + ': ' + oneLine(n.text))); }
+  const rev = topics.filter(tp => tp.nextReview).sort((a, b) => a.nextReview < b.nextReview ? -1 : 1);
+  if (rev.length){
+    L.push('- Revisões agendadas (tópico | quando):');
+    rev.forEach(tp => L.push('  ' + tp.name + ' | ' + reviewInfo(tp).text.toLowerCase() + ' (' + fmtFull(tp.nextReview) + ')'));
+  }
+  return L.join('\n');
+}
+function noteLine(n){
+  if (n.type === 'erro') return '- Errei: ' + oneLine(n.text) + (n.why ? ' | Por quê: ' + oneLine(n.why) : '') + (n.right ? ' | O certo: ' + oneLine(n.right) : '') + (n.sure ? ' | eu tinha certeza' : '') + (n.resolved ? ' (resolvido)' : '');
+  if (n.type === 'duvida') return '- ' + oneLine(n.text) + (n.resolved ? ' (resolvida)' : ' (em aberto)');
+  return '- (' + fmtFull(n.date) + ') ' + (n.title ? oneLine(n.title) + ': ' : '') + oneLine(n.text);
+}
+function buildCaderno(track, opts){
+  opts = opts || {};
+  const topic = opts.topic || 'all', type = opts.type || 'all';
+  let notes = notesOf(track.id).filter(n => (topic === 'all' || n.topicId === topic) && (type === 'all' || n.type === type));
+  notes = notes.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  let used = [], size = 0, cut = false;
+  for (const n of notes){ const l = noteLine(n).length + 1; if (size + l > CONTEXT_LIMIT){ cut = true; break; } used.push(n); size += l; }
+  const L = ['MEU CADERNO DE ESTUDOS (Tatame, ' + fmtFull(today()) + ')',
+    'Use isto como contexto do que eu já estudei. Não repita o que eu já domino; retome as dúvidas e os erros em aberto.',
+    'Trilha: ' + track.name + (track.goal ? ' | Objetivo: ' + track.goal : '')];
+  if (cut) L.push('(Mostrando só os itens mais recentes, para caber.)');
+  const groups = topicsOf(track.id).map(tp => ({id:tp.id, tp:tp})).concat([{id:null, tp:null}]);
+  groups.forEach(g => {
+    const mine = used.filter(n => (n.topicId || null) === g.id);
+    if (!mine.length) return;
+    L.push('');
+    L.push('## ' + (g.tp ? g.tp.name + ' (faixa ' + BELTS[g.tp.belt].name + ')' : 'Geral'));
+    KIND_ORDER.forEach(k => {
+      const items = mine.filter(n => n.type === k).sort((a, b) => a.date < b.date ? -1 : 1);
+      if (!items.length) return;
+      L.push(KINDS[k].many + ':');
+      items.forEach(n => L.push(noteLine(n)));
+    });
+  });
+  if (!used.length) L.push('', 'Ainda não tenho anotações aqui.');
+  return L.join('\n');
+}
+function sessionText(tired){
+  const track = activeTrack();
+  if (!track) return PROMPT;
+  let txt = PROMPT + '\n\n---\n\n';
+  const hasData = topicsOf(track.id).length > 0 || notesOf(track.id).length > 0 || !!track.ficha;
+  if (!hasData){
+    txt += 'Ainda não tenho ficha. Já adianto as respostas da entrevista:\n- O que eu quero aprender: ' + track.name + '\n';
+    if (track.goal) txt += '- Para quê: ' + track.goal + '\n';
+    if (track.deadline) txt += '- Prazo: ' + fmtFull(track.deadline) + '\n';
+    if (track.minutes) txt += '- Tempo por dia: ' + track.minutes + ' minutos\n';
+    txt += 'Pergunte só o que faltar e siga para o teste diagnóstico.';
+  } else {
+    txt += 'Continue de onde paramos. Esta é a minha ficha atual:\n\n' + buildFicha(track);
+    const learned = notesOf(track.id).filter(n => n.type === 'aprendizado').sort((a, b) => a.date < b.date ? 1 : -1).slice(0, 10).reverse();
+    if (learned.length) txt += '\n\nO que eu aprendi recentemente:\n' + learned.map(n => '- ' + topicName(n.topicId) + ': ' + (n.title ? oneLine(n.title) + '. ' : '') + oneLine(n.text)).join('\n');
+    if (track.ficha) txt += '\n\nÚltima ficha que você me deu:\n\n' + track.ficha;
+  }
+  if (tired) txt += '\n\nHoje estou exausto. Faça a sessão mínima de 15 minutos, só revisão.';
+  return txt;
+}
+
+/* ---------- Pedaços de interface ---------- */
+function beltChip(b){ return '<span class="beltchip"><span class="dot" data-b="' + b + '" aria-hidden="true"></span>' + BELTS[b].name + '</span>'; }
+function levels(b){ return '<span class="levels" role="img" aria-label="Faixa ' + BELTS[b].name + ', nível ' + (b + 1) + ' de 4">' + [0,1,2,3].map(i => '<i' + (i <= b ? ' class="on"' : '') + '></i>').join('') + '</span>'; }
+function levelsLabeled(b){ return '<div class="levels-labeled" role="img" aria-label="Faixa ' + BELTS[b].name + ', nível ' + (b + 1) + ' de 4">' + BELTS.map((x, i) => '<div class="' + (i <= b ? 'on' : '') + (i === b ? ' now' : '') + '"><i></i>' + x.level + '</div>').join('') + '</div>'; }
+function kindLabel(k){ return k === 'revisao' ? 'Revisão' : 'Conteúdo novo'; }
+function sessionItem(s){
+  const ch = s.beltBefore !== s.beltAfter ? '<span class="change' + (s.beltAfter < s.beltBefore ? ' down' : '') + '">' + BELTS[s.beltBefore].name + ' → ' + BELTS[s.beltAfter].name + '</span>' : '';
+  return '<li class="s-item"><span class="t-name">' + esc(topicName(s.topicId)) + '</span><span class="s-meta"><span>' + kindLabel(s.kind) + '</span>' +
+    (s.check != null ? '<span>Checagem: ' + s.check + '%</span>' : '') + ch + '</span>' + (s.note ? '<span class="s-note">' + esc(s.note) + '</span>' : '') + '</li>';
+}
+function deadlineText(track){
+  if (!track.deadline) return 'Sem prazo definido';
+  const d = diffDays(today(), track.deadline);
+  if (d > 1) return 'Faltam ' + d + ' dias para o prazo';
+  if (d === 1) return 'Falta 1 dia para o prazo';
+  if (d === 0) return 'O prazo é hoje';
+  return 'O prazo passou há ' + plural(-d, 'dia', 'dias');
+}
+
+/* ---------- Telas ---------- */
+function renderEmpty(){
+  return '<section class="page-head"><h1>Seu tatame está vazio</h1><p class="lede">Crie uma trilha com o que você quer aprender. O Tatame guarda suas faixas, suas revisões e o seu caderno, e prepara tudo para o professor de IA continuar de onde parou.</p>' +
+    '<div class="row"><button class="btn btn-gold" data-action="new-track">Criar minha trilha</button><a class="btn" href="#prompt">Ver o prompt</a></div></section>';
+}
+function renderHoje(track){
+  const t = today(), topics = topicsOf(track.id);
+  const due = topics.filter(tp => tp.nextReview && tp.nextReview <= t).sort((a, b) => a.nextReview < b.nextReview ? -1 : 1);
+  const counts = [0,0,0,0]; topics.forEach(tp => counts[tp.belt]++);
+  let h = '';
+  if (track.example) h += '<p class="example"><span>Esta trilha é um exemplo. Mexa à vontade.</span><button class="btn-text" data-action="new-track">Criar minha trilha</button><button class="btn-text" data-action="delete-example">Apagar exemplo</button></p>';
+  h += '<section class="hero"><h1>' + esc(track.name) + '</h1>' + (track.goal ? '<p class="goal">' + esc(track.goal) + '</p>' : '') +
+    '<p class="meta"><span>' + esc(deadlineText(track)) + '</span>' + (track.minutes ? '<span>' + esc(track.minutes) + ' min por dia</span>' : '') + '</p>' +
+    '<ul class="belt-sum" aria-label="Tópicos em cada faixa">' + BELTS.map((b, i) => '<li>' + beltChip(i) + '<strong>' + counts[i] + '</strong></li>').join('') + '</ul></section>';
+  h += '<section class="panel train" aria-labelledby="train-h"><h2 id="train-h">Treino de hoje</h2>' +
+    '<p>Copie o prompt com o seu progresso e cole na IA que você usa. O professor continua de onde vocês pararam.</p>' +
+    '<div class="row"><button class="btn btn-gold" data-action="copy-session">Copiar prompt + meu progresso</button><button class="btn" data-action="copy-tired">Estou exausto hoje</button></div>' +
+    '<div class="after"><span>Terminou o treino?</span><button class="btn btn-sm" data-action="log">Registrar sessão</button></div></section>';
+  h += '<section class="block" aria-labelledby="due-h"><div class="block-head"><h2 id="due-h">Revisar hoje</h2>' + (due.length ? '<span class="note">' + plural(due.length, 'tópico', 'tópicos') + '</span>' : '') + '</div>' +
+    (due.length ? '<ul class="list">' + due.map(tp => { const r = reviewInfo(tp);
+      return '<li><button class="item" data-action="log-review" data-id="' + tp.id + '"><span class="item-top"><span class="t-name">' + esc(tp.name) + '</span>' + beltChip(tp.belt) + '</span>' +
+        '<span class="item-top"><span class="when ' + r.cls + '">' + r.text + '</span><span class="when">Registrar revisão</span></span></button></li>'; }).join('') + '</ul>'
+      : '<p class="empty">Nada para revisar hoje. Bom dia para conteúdo novo.</p>') + '</section>';
+  return h;
+}
+function renderFaixas(track){
+  const topics = topicsOf(track.id);
+  let h = '<section class="page-head"><h1>Faixas</h1><p class="lede">Aqui não se conta hora. Conta faixa. Um tópico sobe quando você acerta 80% numa checagem feita em outro dia, e desce se ficar abaixo de 60% numa revisão.</p></section>';
+  h += '<section class="block"><div class="block-head"><h2>' + plural(topics.length, 'tópico', 'tópicos') + '</h2><button class="btn btn-sm" data-action="new-topic">Novo tópico</button></div>';
+  h += topics.length ? '<ul class="list">' + topics.map(tp => { const r = reviewInfo(tp);
+    return '<li><button class="item" data-action="open-topic" data-id="' + tp.id + '"><span class="item-top"><span class="t-name">' + esc(tp.name) + '</span>' + beltChip(tp.belt) + '</span>' + levels(tp.belt) +
+      '<span class="sub"><span>' + (tp.lastCheck != null ? 'Última checagem: ' + tp.lastCheck + '%' : 'Sem checagem ainda') + '</span><span class="when ' + r.cls + '">' + r.text + '</span></span></button></li>'; }).join('') + '</ul>'
+    : '<p class="empty">Nenhum tópico ainda. Depois do diagnóstico, o professor te dá o mapa: cadastre os tópicos aqui, com a faixa de cada um.</p>';
+  h += '</section><section class="block"><h2>O que cada faixa significa</h2><ol class="legend">' + BELTS.map(b => '<li>' + beltChip(BELTS.indexOf(b)) + '<p><strong>' + b.level + '.</strong> ' + b.desc + '</p></li>').join('') + '</ol></section>';
+  return h;
+}
+function filteredNotes(track){
+  const q = noteFilter.q.trim().toLowerCase();
+  return notesOf(track.id).filter(n =>
+    (noteFilter.type === 'all' || n.type === noteFilter.type) &&
+    (noteFilter.topic === 'all' || (noteFilter.topic === 'none' ? !n.topicId : n.topicId === noteFilter.topic)) &&
+    (!q || [n.title, n.text, n.why, n.right].join(' ').toLowerCase().indexOf(q) >= 0)
+  ).sort((a, b) => (a.updatedAt || a.date) < (b.updatedAt || b.date) ? 1 : -1);
+}
+function noteCard(n){
+  const k = KINDS[n.type];
+  const done = (n.type === 'erro' || n.type === 'duvida') && n.resolved;
+  let body = '';
+  if (n.type === 'erro'){
+    body = '<dl><dt>Errei</dt><dd>' + esc(n.text) + '</dd>' + (n.why ? '<dt>Por quê</dt><dd>' + esc(n.why) + '</dd>' : '') + (n.right ? '<dt>O certo</dt><dd>' + esc(n.right) + '</dd>' : '') + '</dl>';
+  } else {
+    body = (n.title ? '<p class="note-title">' + esc(n.title) + '</p>' : '') + '<p class="note-text">' + esc(n.text) + '</p>';
+  }
+  const toggle = n.type === 'erro' ? (n.resolved ? 'Reabrir' : 'Não repito mais') : n.type === 'duvida' ? (n.resolved ? 'Reabrir' : 'Resolvida') : '';
+  return '<li class="note-card' + (done ? ' done' : '') + '"><p class="note-head"><span class="kind ' + n.type + '">' + k.one + '</span><span>' + esc(topicName(n.topicId)) + '</span><span>' + esc(fmtShort(n.date)) + '</span>' +
+    (n.type === 'erro' && n.sure ? '<span class="flag">Eu tinha certeza</span>' : '') + (done ? '<span>' + (n.type === 'erro' ? 'Resolvido' : 'Resolvida') + '</span>' : '') + '</p>' + body +
+    '<div class="row">' + (toggle ? '<button class="btn btn-sm" data-action="toggle-note" data-id="' + n.id + '">' + toggle + '</button>' : '') +
+    '<button class="btn-text" data-action="edit-note" data-id="' + n.id + '">Editar</button><button class="btn-text danger" data-action="delete-note" data-id="' + n.id + '" data-confirm="Confirmar">Apagar</button></div></li>';
+}
+function noteListHTML(track){
+  const list = filteredNotes(track);
+  const total = notesOf(track.id).length;
+  return list.length ? '<ul class="list">' + list.map(noteCard).join('') + '</ul>'
+    : '<p class="empty">' + (total ? 'Nada encontrado com esse filtro.' : 'Seu caderno está vazio. Anote o que aprendeu, suas dúvidas e seus erros. Tudo isso vira contexto para a IA.') + '</p>';
+}
+function renderCaderno(track){
+  const topics = topicsOf(track.id);
+  if (noteFilter.topic !== 'all' && noteFilter.topic !== 'none' && !topics.some(t => t.id === noteFilter.topic)) noteFilter.topic = 'all';
+  const counts = {}; notesOf(track.id).forEach(n => { counts[n.type] = (counts[n.type] || 0) + 1; });
+  let h = '<section class="page-head"><h1>Caderno</h1><p class="lede">Seus aprendizados, anotações, dúvidas e erros num lugar só. Quando quiser que a IA saiba o que você já estudou, copie o caderno e cole na conversa.</p>' +
+    '<div class="row"><button class="btn btn-gold" data-action="new-note">Nova anotação</button><button class="btn" data-action="copy-caderno">Copiar caderno para a IA</button></div></section>';
+  h += '<section class="block"><div class="chips" role="group" aria-label="Tipo">' +
+    '<button type="button" data-action="note-type" data-type="all" aria-pressed="' + (noteFilter.type === 'all') + '">Tudo</button>' +
+    KIND_ORDER.map(k => '<button type="button" data-action="note-type" data-type="' + k + '" aria-pressed="' + (noteFilter.type === k) + '">' + KINDS[k].many + (counts[k] ? ' ' + counts[k] : '') + '</button>').join('') + '</div>' +
+    '<div class="filters"><label class="sr" for="noteTopic">Tópico</label><select id="noteTopic"><option value="all">Todos os tópicos</option><option value="none"' + (noteFilter.topic === 'none' ? ' selected' : '') + '>Geral</option>' +
+    topics.map(t => '<option value="' + t.id + '"' + (noteFilter.topic === t.id ? ' selected' : '') + '>' + esc(t.name) + '</option>').join('') + '</select>' +
+    '<label class="sr" for="noteSearch">Buscar</label><input type="search" id="noteSearch" placeholder="Buscar no caderno" value="' + esc(noteFilter.q) + '"></div>' +
+    '<div id="noteList">' + noteListHTML(track) + '</div></section>';
+  return h;
+}
+function renderLinha(track){
+  const sess = sessionsOf(track.id).slice().reverse();
+  const groups = [];
+  sess.forEach(s => { const g = groups[groups.length - 1]; if (g && g.date === s.date) g.items.push(s); else groups.push({date:s.date, items:[s]}); });
+  let h = '<section class="page-head"><h1>Linha de aprendizado</h1><p class="lede">Tudo o que você treinou nesta trilha, com as faixas que mudaram no caminho.</p>' +
+    '<div class="row"><button class="btn" data-action="copy-ficha">Copiar ficha atual</button><button class="btn btn-sm" data-action="log">Registrar sessão</button></div></section>';
+  h += groups.length ? '<section class="block">' + groups.map(g => '<div class="day"><h3>' + esc(fmtLong(g.date)) + '</h3><ul class="list">' + g.items.map(sessionItem).join('') + '</ul></div>').join('') + '</section>'
+    : '<p class="empty">Sua linha começa no primeiro treino registrado.</p>';
+  return h;
+}
+function renderPrompt(){
+  return '<section class="page-head"><h1>O prompt</h1><p class="lede">Transforma qualquer IA gratuita num professor particular de elite, que ensina cada tema faixa por faixa. Funciona no ChatGPT, no Gemini e no Claude.</p></section>' +
+    '<ol class="steps"><li><strong>Copie e cole.</strong> Na aba Hoje, "Copiar prompt + meu progresso" já leva suas faixas, revisões e aprendizados. Se for a primeira vez, use o botão abaixo.</li>' +
+    '<li><strong>Treine com o professor.</strong> Ele faz o diagnóstico, ensina no nível da sua faixa e termina com uma checagem e a Ficha do aluno.</li>' +
+    '<li><strong>Registre aqui.</strong> Anote a % da checagem, o que aprendeu, as dúvidas e os erros. Suas faixas e revisões se atualizam sozinhas.</li></ol>' +
+    '<section class="block"><div class="block-head"><h2>Prompt completo</h2><button class="btn btn-gold btn-sm" data-action="copy-prompt">Copiar prompt</button></div><pre>' + esc(PROMPT) + '</pre></section>';
+}
+function renderTrackSelect(){
+  const sel = $('#trackSelect');
+  const opts = state.tracks.map(t => '<option value="' + t.id + '"' + (t.id === state.activeTrackId ? ' selected' : '') + '>' + esc(t.name) + (t.example ? ' (exemplo)' : '') + '</option>').join('');
+  sel.innerHTML = (state.tracks.length ? opts : '<option value="" selected>Nenhuma trilha</option>') + '<option value="__new">+ Nova trilha</option>';
+}
+function render(){
+  renderTrackSelect();
+  $$('.tabs a').forEach(a => a.setAttribute('aria-current', a.dataset.view === view ? 'page' : 'false'));
+  const track = activeTrack(), el = $('#view');
+  if (view === 'prompt') el.innerHTML = renderPrompt();
+  else if (!track) el.innerHTML = renderEmpty();
+  else el.innerHTML = ({hoje:renderHoje, faixas:renderFaixas, caderno:renderCaderno, linha:renderLinha})[view](track);
+}
+function commit(){ persist(); render(); }
+
+/* ---------- Avisos, cópia e janelas ---------- */
+let toastTimer = null;
+function toast(msg, kind){
+  const el = $('#toast'); el.textContent = msg; el.className = 'toast show' + (kind ? ' ' + kind : '');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.className = 'toast'; }, 4500);
+}
+function copyText(text, okMsg){
+  let p;
+  try { p = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text) : Promise.reject(); }
+  catch(e){ p = Promise.reject(e); }
+  p.then(() => toast(okMsg)).catch(() => {
+    openDialog('<div class="form"><h2>Copie o texto</h2><p class="form-sub">O navegador bloqueou a cópia automática. Toque no texto, selecione tudo e copie.</p><div class="field"><label for="copyArea" class="sr">Texto para copiar</label><textarea id="copyArea" rows="12" readonly>' + esc(text) + '</textarea></div><div class="form-actions"><button type="button" class="btn btn-gold" data-action="close-dialog">Fechar</button></div></div>',
+      d => { const ta = $('#copyArea', d); ta.focus(); ta.select(); });
+  });
+}
+const dlg = $('#dlg');
+function openDialog(html, mount){
+  dlg.innerHTML = html;
+  try { if (!dlg.open) dlg.showModal(); } catch(e){ dlg.setAttribute('open', ''); }
+  dlg.scrollTop = 0;
+  if (mount) mount(dlg);
+}
+function closeDialog(){ try { dlg.close(); } catch(e){ dlg.removeAttribute('open'); } dlg.innerHTML = ''; }
+dlg.addEventListener('click', e => { if (e.target === dlg) closeDialog(); });
+function formError(d, msg){ let el = $('.form-error', d); if (!el){ el = document.createElement('p'); el.className = 'form-error'; el.setAttribute('role', 'alert'); $('.form-actions', d).before(el); } el.textContent = msg; }
+function armed(btn){
+  if (btn.dataset.armed) return true;
+  btn.dataset.armed = '1'; btn.dataset.label = btn.textContent; btn.textContent = btn.dataset.confirm || 'Confirmar';
+  setTimeout(() => { if (btn.isConnected && btn.dataset.armed){ delete btn.dataset.armed; btn.textContent = btn.dataset.label; } }, 4000);
+  return false;
+}
+function topicOptions(track, selected, withNone){
+  return (withNone ? '<option value=""' + (!selected ? ' selected' : '') + '>Geral (sem tópico)</option>' : '') +
+    topicsOf(track.id).map(tp => '<option value="' + tp.id + '"' + (tp.id === selected ? ' selected' : '') + '>' + esc(tp.name) + '</option>').join('');
+}
+function beltOptions(sel){ return BELTS.map((b, i) => '<option value="' + i + '"' + (i === sel ? ' selected' : '') + '>' + b.name + ' (' + b.level + ')</option>').join(''); }
+
+let rowCount = 0;
+function errorRowHTML(){
+  const n = ++rowCount;
+  return '<div class="err-row"><label for="er-what-' + n + '">O que errei<textarea id="er-what-' + n + '" class="er-what" rows="2"></textarea></label>' +
+    '<label for="er-why-' + n + '">Por quê<input type="text" id="er-why-' + n + '" class="er-why"></label>' +
+    '<label for="er-right-' + n + '">O certo<input type="text" id="er-right-' + n + '" class="er-right"></label>' +
+    '<label class="check" for="er-sure-' + n + '"><input type="checkbox" id="er-sure-' + n + '" class="er-sure"> Eu tinha certeza</label>' +
+    '<div><button type="button" class="btn-text danger" data-action="remove-error-row">Remover este erro</button></div></div>';
+}
+
+/* Registrar sessão */
+function openLog(opts){
+  opts = opts || {};
+  const track = activeTrack(); if (!track) return openNewTrack();
+  const topics = topicsOf(track.id), kind = opts.kind || 'novo';
+  openDialog('<form class="form" id="logForm" novalidate><h2>Registrar sessão</h2><p class="form-sub">' + esc(track.name) + '</p>' +
+    '<div class="field"><label for="f-topic">Tópico</label><select id="f-topic">' + topics.map(tp => '<option value="' + tp.id + '"' + (tp.id === opts.topicId ? ' selected' : '') + '>' + esc(tp.name) + ' (' + BELTS[tp.belt].name + ')</option>').join('') +
+    '<option value="__new"' + (topics.length ? '' : ' selected') + '>Novo tópico</option></select></div>' +
+    '<div class="field" id="f-new-wrap"' + (topics.length ? ' hidden' : '') + '><label for="f-new">Nome do novo tópico</label><input type="text" id="f-new" maxlength="80" placeholder="Ex.: Funções"></div>' +
+    '<fieldset class="seg"><legend>Tipo de sessão</legend><div class="opts"><label for="f-kind-novo"><input type="radio" id="f-kind-novo" name="f-kind" value="novo"' + (kind === 'novo' ? ' checked' : '') + '><span>Conteúdo novo</span></label>' +
+    '<label for="f-kind-rev"><input type="radio" id="f-kind-rev" name="f-kind" value="revisao"' + (kind === 'revisao' ? ' checked' : '') + '><span>Revisão</span></label></div></fieldset>' +
+    '<div class="two"><div class="field"><label for="f-date">Data</label><input type="date" id="f-date" value="' + today() + '" max="' + today() + '"></div>' +
+    '<div class="field"><label for="f-check">Acertos na checagem (%)</label><input type="number" id="f-check" inputmode="numeric" min="0" max="100" step="1" placeholder="Ex.: 80"></div></div>' +
+    '<p class="hint">80% ou mais, num dia diferente do dia em que você aprendeu, sobe a faixa. Abaixo de 60%, desce.</p>' +
+    '<div class="field"><label for="f-learned">O que você aprendeu hoje?</label><textarea id="f-learned" rows="3" placeholder="Com as suas palavras. Isso vai para o seu caderno."></textarea></div>' +
+    '<div class="field"><label for="f-doubt">Ficou alguma dúvida?</label><textarea id="f-doubt" rows="2" placeholder="Opcional. O professor retoma na próxima sessão."></textarea></div>' +
+    '<div class="field"><div class="block-head"><span class="field-label"><strong>Erros desta sessão</strong></span><button type="button" class="btn btn-sm" data-action="add-error-row">Adicionar erro</button></div><div id="f-errors" class="err-rows"></div></div>' +
+    '<details><summary>Colar a ficha que a IA te deu (opcional)</summary><div class="field"><label for="f-ficha" class="sr">Ficha do aluno</label><textarea id="f-ficha" rows="5" placeholder="Cole aqui a Ficha do aluno do fim da sessão."></textarea></div></details>' +
+    '<div class="form-actions"><button type="button" class="btn" data-action="close-dialog">Cancelar</button><button type="submit" class="btn btn-gold">Salvar sessão</button></div></form>',
+    d => {
+      const sel = $('#f-topic', d), wrap = $('#f-new-wrap', d);
+      sel.addEventListener('change', () => { wrap.hidden = sel.value !== '__new'; if (!wrap.hidden) $('#f-new', d).focus(); });
+      $('#logForm', d).addEventListener('submit', e => { e.preventDefault(); saveLog(d); });
+    });
+}
+function saveLog(d){
+  const track = activeTrack(); if (!track) return;
+  const t = today();
+  let date = $('#f-date', d).value || t; if (date > t) date = t;
+  const raw = $('#f-check', d).value.trim();
+  let check = null;
+  if (raw !== ''){
+    const n = Number(raw.replace(',', '.').replace('%', ''));
+    if (!isFinite(n) || n < 0 || n > 100){ formError(d, 'A checagem precisa ser um número de 0 a 100.'); return; }
+    check = Math.round(n);
+  }
+  let tp;
+  const sel = $('#f-topic', d).value;
+  if (sel === '__new'){
+    const name = $('#f-new', d).value.trim();
+    if (!name){ formError(d, 'Dê um nome para o novo tópico.'); $('#f-new', d).focus(); return; }
+    tp = newTopic(track.id, name, 0, date); state.topics.push(tp);
+  } else {
+    tp = topicById(sel); if (!tp){ formError(d, 'Escolha um tópico.'); return; }
+  }
+  const kind = ($('input[name="f-kind"]:checked', d) || {}).value || 'novo';
+  const r = applySession(tp, {date:date, kind:kind, check:check});
+  const learned = $('#f-learned', d).value.trim(), doubt = $('#f-doubt', d).value.trim();
+  state.sessions.push({id:uid(), trackId:track.id, topicId:tp.id, date:date, kind:kind, check:check, beltBefore:r.before, beltAfter:r.after, note:learned ? oneLine(learned).slice(0, 160) : ''});
+  if (learned) state.notes.push(newNote(track.id, tp.id, 'aprendizado', {text:learned, date:date, updatedAt:t}));
+  if (doubt) state.notes.push(newNote(track.id, tp.id, 'duvida', {text:doubt, date:date, updatedAt:t}));
+  $$('.err-row', d).forEach(row => {
+    const what = $('.er-what', row).value.trim(); if (!what) return;
+    state.notes.push(newNote(track.id, tp.id, 'erro', {text:what, why:$('.er-why', row).value.trim(), right:$('.er-right', row).value.trim(), sure:$('.er-sure', row).checked, date:date, updatedAt:t}));
+  });
+  const ficha = $('#f-ficha', d).value.trim(); if (ficha) track.ficha = ficha;
+  closeDialog(); commit();
+  let msg;
+  if (r.after > r.before) msg = tp.name + ' subiu para a faixa ' + BELTS[r.after].name + '.';
+  else if (r.after < r.before) msg = tp.name + ' voltou para a faixa ' + BELTS[r.after].name + '. Bora reforçar.';
+  else msg = 'Sessão salva.';
+  toast(msg + ' ' + reviewInfo(tp).text + '.', r.after > r.before ? 'up' : '');
+}
+
+/* Caderno: nova anotação e edição */
+function openNote(opts){
+  opts = opts || {};
+  const track = activeTrack(); if (!track) return openNewTrack();
+  const n = opts.id ? state.notes.find(x => x.id === opts.id) : null;
+  const type = n ? n.type : (opts.type || (noteFilter.type !== 'all' ? noteFilter.type : 'aprendizado'));
+  const topicSel = n ? n.topicId : (opts.topicId !== undefined ? opts.topicId : (noteFilter.topic !== 'all' && noteFilter.topic !== 'none' ? noteFilter.topic : null));
+  openDialog('<form class="form" id="noteForm" novalidate><h2>' + (n ? 'Editar anotação' : 'Nova anotação') + '</h2>' +
+    '<fieldset class="seg"><legend>Tipo</legend><div class="opts">' + KIND_ORDER.map(k => '<label for="nt-' + k + '"><input type="radio" id="nt-' + k + '" name="nt" value="' + k + '"' + (k === type ? ' checked' : '') + '><span>' + KINDS[k].one + '</span></label>').join('') + '</div></fieldset>' +
+    '<div class="field"><label for="n-topic">Tópico</label><select id="n-topic">' + topicOptions(track, topicSel, true) + '</select></div>' +
+    '<div class="field" id="n-title-wrap"><label for="n-title">Título (opcional)</label><input type="text" id="n-title" maxlength="120" value="' + esc(n ? n.title : '') + '"></div>' +
+    '<div class="field"><label for="n-text" id="n-text-label">' + KINDS[type].label + '</label><textarea id="n-text" rows="6">' + esc(n ? n.text : '') + '</textarea></div>' +
+    '<div id="n-err-wrap" class="field"><div class="field"><label for="n-why">Por quê</label><input type="text" id="n-why" value="' + esc(n ? n.why : '') + '"></div>' +
+    '<div class="field"><label for="n-right">O certo</label><input type="text" id="n-right" value="' + esc(n ? n.right : '') + '"></div>' +
+    '<label class="check" for="n-sure"><input type="checkbox" id="n-sure"' + (n && n.sure ? ' checked' : '') + '> Eu tinha certeza da resposta</label></div>' +
+    '<div class="form-actions"><button type="button" class="btn" data-action="close-dialog">Cancelar</button><button type="submit" class="btn btn-gold">' + (n ? 'Salvar' : 'Guardar no caderno') + '</button></div></form>',
+    d => {
+      const sync = () => {
+        const k = ($('input[name="nt"]:checked', d) || {}).value || 'aprendizado';
+        $('#n-text-label', d).textContent = KINDS[k].label;
+        $('#n-title-wrap', d).hidden = (k === 'erro' || k === 'duvida');
+        $('#n-err-wrap', d).hidden = k !== 'erro';
+      };
+      $$('input[name="nt"]', d).forEach(r => r.addEventListener('change', sync)); sync();
+      $('#noteForm', d).addEventListener('submit', e => {
+        e.preventDefault();
+        const k = ($('input[name="nt"]:checked', d) || {}).value || 'aprendizado';
+        const text = $('#n-text', d).value.trim(); if (!text){ formError(d, 'Escreva alguma coisa antes de guardar.'); return; }
+        const f = {type:k, topicId:$('#n-topic', d).value || null, title:(k === 'erro' || k === 'duvida') ? '' : $('#n-title', d).value.trim(), text:text,
+          why:k === 'erro' ? $('#n-why', d).value.trim() : '', right:k === 'erro' ? $('#n-right', d).value.trim() : '', sure:k === 'erro' && $('#n-sure', d).checked, updatedAt:today()};
+        if (n) Object.assign(n, f); else state.notes.push(newNote(track.id, f.topicId, k, f));
+        closeDialog(); commit(); toast(n ? 'Anotação salva.' : 'Guardado no caderno.');
+      });
+    });
+}
+
+function openNewTopic(){
+  const track = activeTrack(); if (!track) return openNewTrack();
+  openDialog('<form class="form" id="topicNew"><h2>Novo tópico</h2><p class="form-sub">' + esc(track.name) + '</p>' +
+    '<div class="field"><label for="tn-name">Nome do tópico</label><input type="text" id="tn-name" maxlength="80" placeholder="Ex.: Funções"></div>' +
+    '<div class="field"><label for="tn-belt">Faixa inicial</label><select id="tn-belt">' + beltOptions(0) + '</select><p class="hint">Use a faixa que o diagnóstico do professor indicou. Na dúvida, comece na Branca.</p></div>' +
+    '<div class="form-actions"><button type="button" class="btn" data-action="close-dialog">Cancelar</button><button type="submit" class="btn btn-gold">Criar tópico</button></div></form>',
+    d => {
+      $('#tn-name', d).focus();
+      $('#topicNew', d).addEventListener('submit', e => {
+        e.preventDefault();
+        const name = $('#tn-name', d).value.trim(); if (!name){ formError(d, 'Dê um nome para o tópico.'); return; }
+        state.topics.push(newTopic(track.id, name, Number($('#tn-belt', d).value), today()));
+        closeDialog(); commit(); toast('Tópico criado.');
+      });
+    });
+}
+function openTopic(id){
+  const tp = topicById(id); if (!tp) return;
+  const track = activeTrack();
+  const hist = state.sessions.filter(s => s.topicId === id).slice().reverse().slice(0, 6);
+  const notes = state.notes.filter(n => n.topicId === id).sort((a, b) => (a.updatedAt || a.date) < (b.updatedAt || b.date) ? 1 : -1).slice(0, 6);
+  const r = reviewInfo(tp);
+  openDialog('<form class="form" id="topicForm"><h2>' + esc(tp.name) + '</h2>' +
+    '<div class="field">' + beltChip(tp.belt) + levelsLabeled(tp.belt) + '<p class="hint">' + BELTS[tp.belt].desc + '</p></div>' +
+    '<dl class="facts"><div><dt>Última checagem</dt><dd>' + (tp.lastCheck != null ? tp.lastCheck + '%' : 'Nenhuma') + '</dd></div><div><dt>Próxima revisão</dt><dd>' + esc(r.text.replace('Revisão ', '').replace('Revisar ', '')) + '</dd></div><div><dt>Treinos na faixa</dt><dd>' + (tp.stripes || 0) + '</dd></div></dl>' +
+    '<div class="sec"><div class="block-head"><h3>Caderno deste tópico</h3><span class="row"><button type="button" class="btn-text" data-action="copy-topic-caderno" data-id="' + tp.id + '">Copiar para a IA</button><button type="button" class="btn btn-sm" data-action="note-for-topic" data-id="' + tp.id + '">Nova anotação</button></span></div>' +
+    (notes.length ? '<ul class="mini">' + notes.map(n => '<li><span class="k">' + KINDS[n.type].one + '</span>' + esc(n.title ? n.title + ': ' : '') + esc(oneLine(n.text).slice(0, 140)) + '</li>').join('') + '</ul>' : '<p class="empty">Nada anotado neste tópico ainda.</p>') + '</div>' +
+    (hist.length ? '<div class="sec"><h3>Histórico</h3><ul class="mini">' + hist.map(s => '<li>' + esc(fmtShort(s.date)) + ', ' + kindLabel(s.kind).toLowerCase() + (s.check != null ? ', ' + s.check + '%' : '') + (s.beltBefore !== s.beltAfter ? ', ' + BELTS[s.beltBefore].name + ' → ' + BELTS[s.beltAfter].name : '') + '</li>').join('') + '</ul></div>' : '') +
+    '<div class="sec"><div class="field"><label for="t-name">Nome do tópico</label><input type="text" id="t-name" maxlength="80" value="' + esc(tp.name) + '"></div>' +
+    '<div class="field"><label for="t-belt">Ajustar faixa</label><select id="t-belt">' + beltOptions(tp.belt) + '</select><p class="hint">Use depois do diagnóstico. No dia a dia, as faixas mudam sozinhas pelas checagens.</p></div></div>' +
+    '<div class="form-actions"><button type="button" class="btn-text danger" data-action="delete-topic" data-id="' + tp.id + '" data-confirm="Confirmar: apagar tópico">Apagar tópico</button><span class="spacer"></span>' +
+    '<button type="button" class="btn" data-action="log-topic" data-id="' + tp.id + '">Registrar sessão</button><button type="submit" class="btn btn-gold">Salvar</button></div></form>',
+    d => {
+      $('#topicForm', d).addEventListener('submit', e => {
+        e.preventDefault();
+        const name = $('#t-name', d).value.trim(); if (!name){ formError(d, 'O tópico precisa de um nome.'); return; }
+        tp.name = name;
+        const nb = Number($('#t-belt', d).value);
+        if (nb !== tp.belt){ tp.belt = nb; tp.beltSince = today(); tp.stripes = 0; }
+        closeDialog(); commit(); toast('Tópico salvo.');
+      });
+    });
+}
+function trackFields(t){
+  t = t || {};
+  return '<div class="field"><label for="k-name">O que você quer aprender</label><input type="text" id="k-name" maxlength="60" placeholder="Ex.: Inglês para entrevistas" value="' + esc(t.name || '') + '"></div>' +
+    '<div class="field"><label for="k-goal">Para quê</label><input type="text" id="k-goal" maxlength="120" placeholder="Ex.: Passar no concurso do TJ" value="' + esc(t.goal || '') + '"></div>' +
+    '<div class="two"><div class="field"><label for="k-deadline">Prazo</label><input type="date" id="k-deadline" value="' + esc(t.deadline || '') + '"></div>' +
+    '<div class="field"><label for="k-min">Minutos por dia</label><input type="number" id="k-min" inputmode="numeric" min="5" max="600" step="5" placeholder="Ex.: 40" value="' + esc(t.minutes || '') + '"></div></div>';
+}
+function readTrackFields(d){
+  const m = Number($('#k-min', d).value);
+  return {name:$('#k-name', d).value.trim(), goal:$('#k-goal', d).value.trim(), deadline:$('#k-deadline', d).value, minutes: m > 0 ? Math.round(m) : ''};
+}
+function openNewTrack(){
+  openDialog('<form class="form" id="trackNew"><h2>Nova trilha</h2><p class="form-sub">Uma trilha é uma coisa que você quer aprender, com objetivo e prazo.</p>' + trackFields() +
+    '<div class="form-actions"><button type="button" class="btn" data-action="close-dialog">Cancelar</button><button type="submit" class="btn btn-gold">Criar trilha</button></div></form>',
+    d => {
+      $('#k-name', d).focus();
+      $('#trackNew', d).addEventListener('submit', e => {
+        e.preventDefault();
+        const f = readTrackFields(d); if (!f.name){ formError(d, 'Diga o que você quer aprender.'); return; }
+        const t = Object.assign({id:uid(), ficha:'', example:false, createdAt:today()}, f);
+        state.tracks.push(t); state.activeTrackId = t.id;
+        closeDialog(); commit(); location.hash = 'hoje';
+        toast('Trilha criada. Copie o prompt e comece pelo diagnóstico.');
+      });
+    });
+}
+function deleteTrack(id){
+  state.tracks = state.tracks.filter(t => t.id !== id);
+  state.topics = state.topics.filter(t => t.trackId !== id);
+  state.sessions = state.sessions.filter(s => s.trackId !== id);
+  state.notes = state.notes.filter(n => n.trackId !== id);
+  if (state.activeTrackId === id) state.activeTrackId = state.tracks[0] ? state.tracks[0].id : null;
+}
+function openSettings(){
+  const track = activeTrack();
+  openDialog('<div class="form"><h2>Ajustes</h2>' +
+    (track ? '<form class="field" id="trackEdit"><h3>Trilha atual</h3>' + trackFields(track) +
+      '<div class="row"><button type="submit" class="btn btn-gold btn-sm">Salvar trilha</button><button type="button" class="btn-text danger" data-action="delete-track" data-confirm="Confirmar: apagar trilha">Apagar trilha</button></div></form>' : '') +
+    '<section class="sec"><h3>Seus dados</h3><p class="store-note">' + esc(storeNote()) + '</p>' +
+    '<div class="row"><button type="button" class="btn btn-sm" data-action="copy-backup">Copiar backup</button></div>' +
+    '<div class="field"><label for="s-restore">Restaurar backup</label><textarea id="s-restore" rows="3" placeholder="Cole aqui o texto do backup"></textarea></div>' +
+    '<div class="field"><label for="s-file">Ou escolha um arquivo de backup</label><input type="file" id="s-file" accept=".json,.txt,application/json,text/plain"></div>' +
+    '<div class="row"><button type="button" class="btn btn-sm" data-action="restore">Restaurar</button><button type="button" class="btn-text danger" data-action="wipe" data-confirm="Confirmar: apagar tudo">Apagar todos os dados</button></div></section>' +
+    '<div class="form-actions"><button type="button" class="btn" data-action="close-dialog">Fechar</button></div></div>',
+    d => {
+      const f = $('#trackEdit', d);
+      if (f) f.addEventListener('submit', e => {
+        e.preventDefault();
+        const v = readTrackFields(d); if (!v.name){ toast('A trilha precisa de um nome.'); return; }
+        Object.assign(track, v); closeDialog(); commit(); toast('Trilha salva.');
+      });
+      $('#s-file', d).addEventListener('change', ev => {
+        const file = ev.target.files && ev.target.files[0]; if (!file) return;
+        const rd = new FileReader(); rd.onload = () => { $('#s-restore', d).value = String(rd.result || ''); }; rd.readAsText(file);
+      });
+    });
+}
+
+/* ---------- Ações ---------- */
+const actions = {
+  'new-track': () => openNewTrack(),
+  'settings': () => openSettings(),
+  'copy-session': () => copyText(sessionText(false), 'Copiado. Cole na IA que você usa.'),
+  'copy-tired': () => copyText(sessionText(true), 'Copiado. Hoje é sessão mínima de 15 minutos.'),
+  'copy-prompt': () => copyText(PROMPT, 'Prompt copiado.'),
+  'copy-ficha': () => copyText(buildFicha(activeTrack()), 'Ficha copiada.'),
+  'copy-caderno': () => { const t = activeTrack(); copyText(buildCaderno(t, {topic:noteFilter.topic === 'none' ? 'all' : noteFilter.topic, type:noteFilter.type}), 'Caderno copiado. Cole na conversa com a IA.'); },
+  'copy-topic-caderno': el => copyText(buildCaderno(activeTrack(), {topic:el.dataset.id}), 'Caderno do tópico copiado.'),
+  'copy-backup': () => copyText(JSON.stringify(state), 'Backup copiado. Guarde num lugar seguro.'),
+  'log': () => openLog(),
+  'log-review': el => openLog({topicId:el.dataset.id, kind:'revisao'}),
+  'log-topic': el => openLog({topicId:el.dataset.id, kind:'revisao'}),
+  'open-topic': el => openTopic(el.dataset.id),
+  'new-topic': () => openNewTopic(),
+  'new-note': () => openNote(),
+  'note-for-topic': el => openNote({topicId:el.dataset.id}),
+  'edit-note': el => openNote({id:el.dataset.id}),
+  'note-type': el => { noteFilter.type = el.dataset.type; render(); },
+  'toggle-note': el => { const n = state.notes.find(x => x.id === el.dataset.id); if (n){ n.resolved = !n.resolved; commit(); toast(n.resolved ? (n.type === 'erro' ? 'Boa. Erro resolvido.' : 'Dúvida resolvida.') : 'Reaberto.'); } },
+  'delete-note': el => { if (!armed(el)) return; state.notes = state.notes.filter(x => x.id !== el.dataset.id); commit(); toast('Apagado do caderno.'); },
+  'add-error-row': () => { const box = $('#f-errors'); if (box){ box.insertAdjacentHTML('beforeend', errorRowHTML()); const last = $$('.er-what', box).pop(); if (last) last.focus(); } },
+  'remove-error-row': el => { const r = el.closest('.err-row'); if (r) r.remove(); },
+  'close-dialog': () => closeDialog(),
+  'delete-topic': el => {
+    if (!armed(el)) return;
+    const id = el.dataset.id;
+    state.topics = state.topics.filter(t => t.id !== id);
+    state.sessions = state.sessions.filter(s => s.topicId !== id);
+    state.notes.forEach(n => { if (n.topicId === id) n.topicId = null; });
+    closeDialog(); commit(); toast('Tópico apagado. As anotações dele foram para Geral.');
+  },
+  'delete-example': () => { const ex = state.tracks.find(t => t.example); if (ex){ deleteTrack(ex.id); commit(); toast('Exemplo apagado.'); } },
+  'delete-track': el => { if (!armed(el)) return; const t = activeTrack(); if (t){ deleteTrack(t.id); closeDialog(); commit(); toast('Trilha apagada.'); } },
+  'restore': () => {
+    const raw = ($('#s-restore') || {}).value || '';
+    let n = null; try { n = normalize(JSON.parse(raw)); } catch(e){ n = null; }
+    if (!n){ toast('Esse texto não é um backup do Tatame. Confira se copiou ele inteiro.'); return; }
+    state = n; closeDialog(); commit(); toast('Backup restaurado.');
+  },
+  'wipe': el => { if (!armed(el)) return; state = blankState(); closeDialog(); commit(); toast('Tudo apagado.'); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const fn = actions[el.dataset.action];
+  if (fn){ e.preventDefault(); fn(el, e); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'trackSelect'){
+    if (e.target.value === '__new'){ renderTrackSelect(); openNewTrack(); return; }
+    if (!e.target.value) return;
+    state.activeTrackId = e.target.value; noteFilter.topic = 'all'; commit();
+  } else if (e.target.id === 'noteTopic'){ noteFilter.topic = e.target.value; render(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'noteSearch'){ noteFilter.q = e.target.value; const t = activeTrack(); const box = $('#noteList'); if (t && box) box.innerHTML = noteListHTML(t); }
+});
+function viewFromHash(){ let h = (location.hash || '').replace('#', ''); if (h === 'erros') h = 'caderno'; return VIEWS.indexOf(h) >= 0 ? h : 'hoje'; }
+window.addEventListener('hashchange', () => { view = viewFromHash(); render(); window.scrollTo(0, 0); });
+
+/* ---------- Início ---------- */
+const local = loadLocal();
+state = (local && normalize(local)) || seedState();
+view = viewFromHash();
+render();
+if (window.claude && typeof window.claude.use === 'function') initDb();
+else setTimeout(() => { if (window.claude && typeof window.claude.use === 'function') initDb(); }, 1500);
+})();
+</script>
+</body>
+</html>
